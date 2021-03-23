@@ -1,14 +1,9 @@
 ---
-# - name: Ensure SELinux is set to enforcing mode
-#   ansible.builtin.lineinfile:
-#     path: /etc/selinux/config
-#     regexp: '^SELINUX='
-#     line: SELINUX=enforcing
-
 - name: Stop the systemd service.
   systemd:
     state: stopped
     name: "syncthing@{{ syncthing_user }}.service"
+  changed_when: false
 
 - name: Change the GUI listen address.
   community.general.xml:
@@ -26,3 +21,4 @@
   systemd:
     state: started
     name: "syncthing@{{ syncthing_user }}.service"
+  changed_when: false
