@@ -8,7 +8,7 @@ name: Continuous Integration
 
 defaults:
   run:
-    working-directory: "stegmannb.template"
+    working-directory: "stegmannb.syncthing"
 
 jobs:
   pre-commit:
@@ -43,13 +43,13 @@ jobs:
       - name: Check out the codebase.
         uses: actions/checkout@v2
         with:
-          path: "stegmannb.template"
+          path: "stegmannb.syncthing"
 
       - name: Molecule
         uses: gofrolist/molecule-action@v2
         with:
           molecule_command: test
-          molecule_working_dir: "stegmannb.template"
+          molecule_working_dir: "stegmannb.syncthing"
         env:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"
