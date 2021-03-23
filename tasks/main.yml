@@ -2,7 +2,7 @@
 - name: Check if running on an compatible platform.
   assert:
     that: >-
-      ansible_distribution == 'Ubuntu'
+      ansible_os_family == 'Debian'
     fail_msg: "This platform is not supported by this role: {{ ansible_distribution }}"
     quiet: true
 
