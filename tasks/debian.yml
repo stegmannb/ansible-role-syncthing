@@ -1,0 +1,29 @@
+---
+- name: Add the release Apt signing key.
+  apt_key:
+    url: https://syncthing.net/release-key.txt
+    state: present
+
+- name: Add the syncthing stable repository to APT sources.
+  apt_repository:
+    repo: deb https://apt.syncthing.net/ syncthing stable
+    state: present
+    update_cache: true
+
+- name: Increase preference of Syncthing's packages ("pinning")
+  blockinfile:
+    path: /etc/apt/preferences.d/syncthing
+    block: |-
+      Package: *
+      Pin: origin apt.syncthing.net
+      Pin-Priority: 990
+    create: true
+    group: root
+    owner: root
+    mode: "0644"
+
+- name: Install syncthing packkage.
+  apt:
+    name: syncthing
+    state: latest
+    cache_valid_time: "{{ cache_valid_time | default(0) }}"

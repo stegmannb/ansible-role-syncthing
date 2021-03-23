@@ -1,4 +1,14 @@
 ---
-- name: Example task
-  debug:
-    msg: Running example task
+- name: Check if running on an compatible platform.
+  assert:
+    that: >-
+      ansible_distribution == 'Ubuntu'
+    fail_msg: "This platform is not supported by this role: {{ ansible_distribution }}"
+    quiet: true
+
+- name: Execute distribution dependent setup.
+  include_tasks: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution|lower }}-{{ ansible_distribution_major_version|lower }}.yml"
+    - "{{ ansible_distribution|lower }}.yml"
+    - "{{ ansible_os_family|lower }}.yml"
