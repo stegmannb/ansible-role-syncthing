@@ -4,7 +4,7 @@
     name:
       - gpg-agent
       - apt-transport-https
-      - python3-lxml
+      - "{{ 'python3-lxml' if ansible_python_version[0] == 3 else 'python-lxml' }}"
     state: latest
     cache_valid_time: "{{ apt_cache_valid_time }}"
 
