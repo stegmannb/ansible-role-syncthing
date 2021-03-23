@@ -22,7 +22,7 @@
     owner: root
     mode: "0644"
 
-- name: Install syncthing packkage.
+- name: Install syncthing package. # noqa package-latest 403
   apt:
     name: syncthing
     state: latest
