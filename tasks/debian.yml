@@ -1,4 +1,8 @@
 ---
+- name: debug
+  debug:
+    msg: "{{ ansible_python_version }} | {{ ansible_python_version[0] }}"
+
 - name: Install required system packages. # noqa package-latest 403
   apt:
     name:
