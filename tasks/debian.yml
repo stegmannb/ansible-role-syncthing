@@ -1,9 +1,11 @@
 ---
-- name: Install gpg-agent package. # noqa package-latest 403
+- name: Install required packages. # noqa package-latest 403
   apt:
-    name: gpg-agent
+    name:
+      - gpg-agent
+      - apt-transport-https
     state: latest
-    cache_valid_time: "{{ cache_valid_time | default(0) }}"
+    cache_valid_time: "{{ apt_cache_valid_time }}"
 
 - name: Add the release Apt signing key.
   apt_key:
@@ -32,4 +34,4 @@
   apt:
     name: syncthing
     state: latest
-    cache_valid_time: "{{ cache_valid_time | default(0) }}"
+    cache_valid_time: "{{ apt_cache_valid_time }}"
