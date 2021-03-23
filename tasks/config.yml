@@ -1,0 +1,28 @@
+---
+# - name: Ensure SELinux is set to enforcing mode
+#   ansible.builtin.lineinfile:
+#     path: /etc/selinux/config
+#     regexp: '^SELINUX='
+#     line: SELINUX=enforcing
+
+- name: Stop the systemd service.
+  systemd:
+    state: stopped
+    name: "syncthing@{{ syncthing_user }}.service"
+
+- name: Change the GUI listen address.
+  community.general.xml:
+    path: "{{ syncthing_user_result.home }}/.config/syncthing/config.xml"
+    xpath: /configuration/gui/address
+    value: "{{ syncthing_address }}"
+
+# - name: Change TLS setting.
+#   community.general.xml:
+#     path: "{{ syncthing_user_result.home }}/.config/syncthing/config.xml"
+#     xpath: /configuration/gui/@tls
+#     value: "{{ syncthing_tls }}"
+
+- name: Start the systemd service.
+  systemd:
+    state: started
+    name: "syncthing@{{ syncthing_user }}.service"

@@ -12,3 +12,19 @@
     - "{{ ansible_distribution|lower }}-{{ ansible_distribution_major_version|lower }}.yml"
     - "{{ ansible_distribution|lower }}.yml"
     - "{{ ansible_os_family|lower }}.yml"
+
+- name: Create the syncthing user.
+  user:
+    name: "{{ syncthing_user }}"
+    create_home: true
+  register: syncthing_user_result
+
+- name: Enable the systemd service.
+  systemd:
+    state: started
+    daemon_reload: true
+    enabled: true
+    name: "syncthing@{{ syncthing_user }}.service"
+
+- name: Configure syncthing instance.
+  include_tasks: config.yml

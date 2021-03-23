@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User={{syncthing_user}}
 Group={{syncthing_user}}
-ExecStart={{syncthing_home}}/bin/syncthing
+ExecStart=/usr/bin/syncthing
 Restart=on-abort
 
 [Install]
