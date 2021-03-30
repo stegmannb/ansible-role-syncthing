@@ -1,6 +1,9 @@
 [Unit]
 Description=Syncthing service
 After=network.target
+{% if syncthing_wait_for_zfs %}
+Wants=zfs.target
+{% endif %}
 
 [Service]
 User={{syncthing_user}}
