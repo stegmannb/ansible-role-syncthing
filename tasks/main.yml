@@ -2,11 +2,11 @@
 - name: Execute distribution dependent setup.
   include_tasks: "{{ item }}"
   with_first_found:
-    files:
-      - "{{ ansible_distribution|lower }}-{{ ansible_distribution_major_version|lower }}.yml"
-      - "{{ ansible_distribution|lower }}.yml"
-      - "{{ ansible_os_family|lower }}.yml"
-    skip: "{{ skip_unsupported_os }}"
+    - files:
+        - "{{ ansible_distribution|lower }}-{{ ansible_distribution_major_version|lower }}.yml"
+        - "{{ ansible_distribution|lower }}.yml"
+        - "{{ ansible_os_family|lower }}.yml"
+      skip: "{{ skip_unsupported_os }}"
 
 - name: Create the syncthing user.
   user:
