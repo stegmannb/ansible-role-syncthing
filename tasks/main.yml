@@ -1,23 +1,19 @@
 ---
-- name: Check if running on an compatible platform.
-  assert:
-    that: >-
-      ansible_os_family == 'Debian'
-    fail_msg: "This platform is not supported by this role: {{ ansible_distribution }}"
-    quiet: true
-
 - name: Execute distribution dependent setup.
   include_tasks: "{{ item }}"
   with_first_found:
-    - "{{ ansible_distribution|lower }}-{{ ansible_distribution_major_version|lower }}.yml"
-    - "{{ ansible_distribution|lower }}.yml"
-    - "{{ ansible_os_family|lower }}.yml"
+    files:
+      - "{{ ansible_distribution|lower }}-{{ ansible_distribution_major_version|lower }}.yml"
+      - "{{ ansible_distribution|lower }}.yml"
+      - "{{ ansible_os_family|lower }}.yml"
+    skip: "{{ skip_unsupported_os }}"
 
 - name: Create the syncthing user.
   user:
     name: "{{ syncthing_user }}"
     create_home: true
   register: syncthing_user_result
+  become: true
 
 - name: Enable the systemd service.
   systemd:
@@ -25,6 +21,7 @@
     daemon_reload: true
     enabled: true
     name: "syncthing@{{ syncthing_user }}.service"
+  become: true
 
 - name: Configure syncthing instance.
   include_tasks: config.yml

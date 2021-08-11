@@ -4,12 +4,14 @@
     state: stopped
     name: "syncthing@{{ syncthing_user }}.service"
   changed_when: false
+  become: true
 
 - name: Change the GUI listen address.
   community.general.xml:
     path: "{{ syncthing_user_result.home }}/.config/syncthing/config.xml"
     xpath: /configuration/gui/address
     value: "{{ syncthing_address }}"
+  become: true
 
 # - name: Change TLS setting.
 #   community.general.xml:
@@ -22,3 +24,4 @@
     state: started
     name: "syncthing@{{ syncthing_user }}.service"
   changed_when: false
+  become: true

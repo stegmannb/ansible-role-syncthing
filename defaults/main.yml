@@ -1,4 +1,5 @@
 ---
+skip_unsupported_os: false
 apt_cache_valid_time: 0
 syncthing_user: syncthing
 syncthing_address: "0.0.0.0:8384"

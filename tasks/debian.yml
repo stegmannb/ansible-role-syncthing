@@ -5,19 +5,21 @@
       - gpg-agent
       - apt-transport-https
       - "{{ 'python3-lxml' if ansible_python_version[0] == '3' else 'python-lxml' }}"
-    state: latest
     cache_valid_time: "{{ apt_cache_valid_time }}"
+  become: true
 
 - name: Add the release Apt signing key.
   apt_key:
     url: https://syncthing.net/release-key.txt
     state: present
+  become: true
 
 - name: Add the syncthing stable repository to APT sources.
   apt_repository:
     repo: deb https://apt.syncthing.net/ syncthing stable
     state: present
     update_cache: true
+  become: true
 
 - name: Increase preference of Syncthing's packages ("pinning")
   blockinfile:
@@ -30,9 +32,10 @@
     group: root
     owner: root
     mode: "0644"
+  become: true
 
-- name: Install syncthing package. # noqa package-latest 403
+- name: Install syncthing package.
   apt:
     name: syncthing
-    state: latest
     cache_valid_time: "{{ apt_cache_valid_time }}"
+  become: true
