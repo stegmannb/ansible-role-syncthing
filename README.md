@@ -1,28 +1,26 @@
 # Ansible Template Role
 
-[![License: MIT](https://img.shields.io/github/license/stegmannb/ansible-role-template)](https://github.com/stegmannb/ansible-role-syncthing/blob/master/LICENSE)
+[![License: MIT](https://img.shields.io/github/license/stegmannb/ansible-role-syncthing)](https://github.com/stegmannb/ansible-role-syncthing/blob/master/LICENSE)
 ![Continuous Integration](https://github.com/stegmannb/ansible-role-syncthing/workflows/Continuous%20Integration/badge.svg)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
 ## Requirements
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This role expects a Debian based distribution.
 
 ## Role Variables
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
-
-## Dependencies
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+- `skip_unsupported_os` (Default: false): Skip the role if the host's OS is not supported.
+- `syncthing_user` (Default: syncthing): The user running syncthing.
+- `syncthing_address` (Default: 0.0.0.0:8384): The address Syncthing's web GUI is listining at.
+- `syncthing_wait_for_zfs` (Default: false): If true the Syncthing systemd service waits for ZFS.
+- `apt_cache_valid_time`: (Default: 0): Update the apt cache if it is older than the cache_valid_time. This option is set in seconds. [Ansible Documentation](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-cache_valid_time)
 
 ## Example Playbook
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
     - hosts: servers
       roles:
-         - { role: stegmannb.syncthing, become: true }
+         - role: stegmannb.syncthing
 
 ## License
 
