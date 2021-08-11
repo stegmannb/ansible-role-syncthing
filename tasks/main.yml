@@ -1,18 +1,28 @@
 ---
-- name: Execute distribution dependent setup.
-  include_tasks: "{{ item }}"
-  with_first_found:
-    - files:
-        - "{{ ansible_distribution|lower }}-{{ ansible_distribution_major_version|lower }}.yml"
-        - "{{ ansible_distribution|lower }}.yml"
-        - "{{ ansible_os_family|lower }}.yml"
-      skip: "{{ skip_unsupported_os }}"
-  register: setup
-
 - name: Check if the role should be skipped.
-  when: not setup.skipped
+  when: >-
+    ansible_distribution|lower in ["debian"]
+    or ansible_os_family|lower in ["debian"]
   block:
-    - name: Create the syncthing user.
+    - name: Check if running on a supported platform.
+      assert:
+        that: >-
+          ansible_distribution|lower in ["debian"]
+          or ansible_os_family|lower in ["debian"]
+        fail_msg: This role does not support your distribution {{ ansible_distribution }}.
+        quiet: true
+
+    - name: Execute distribution dependent setup.
+      include_tasks: "{{ item }}"
+      with_first_found:
+        - files:
+            - "setup-{{ ansible_distribution|lower }}-{{ ansible_distribution_major_version|lower }}.yml"
+            - "setup-{{ ansible_distribution|lower }}.yml"
+            - "setup-{{ ansible_os_family|lower }}.yml"
+          skip: "{{ skip_unsupported_os }}"
+      register: setup
+
+    - name: Create the Syncthing user.
       user:
         name: "{{ syncthing_user }}"
         create_home: true
@@ -27,5 +37,5 @@
         name: "syncthing@{{ syncthing_user }}.service"
       become: true
 
-    - name: Configure syncthing instance.
+    - name: Configure Syncthing instance.
       include_tasks: config.yml
