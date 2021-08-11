@@ -7,21 +7,25 @@
         - "{{ ansible_distribution|lower }}.yml"
         - "{{ ansible_os_family|lower }}.yml"
       skip: "{{ skip_unsupported_os }}"
+  register: setup
 
-- name: Create the syncthing user.
-  user:
-    name: "{{ syncthing_user }}"
-    create_home: true
-  register: syncthing_user_result
-  become: true
+- name: Check if the role should be skipped.
+  when: not setup.skipped
+  block:
+    - name: Create the syncthing user.
+      user:
+        name: "{{ syncthing_user }}"
+        create_home: true
+      register: syncthing_user_result
+      become: true
 
-- name: Enable the systemd service.
-  systemd:
-    state: started
-    daemon_reload: true
-    enabled: true
-    name: "syncthing@{{ syncthing_user }}.service"
-  become: true
+    - name: Enable the systemd service.
+      systemd:
+        state: started
+        daemon_reload: true
+        enabled: true
+        name: "syncthing@{{ syncthing_user }}.service"
+      become: true
 
-- name: Configure syncthing instance.
-  include_tasks: config.yml
+    - name: Configure syncthing instance.
+      include_tasks: config.yml
