@@ -6,7 +6,7 @@
       or ansible_os_family|lower in ["debian"]
     fail_msg: This role does not support your distribution {{ ansible_distribution }}.
     quiet: true
-    when: not skip_unsupported_os
+  when: not skip_unsupported_os
 
 - name: Check if the role should be skipped.
   when: >-
